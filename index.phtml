@@ -1,0 +1,72 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(-1);
+
+include 'ArrayValidate.class.php';
+if (!empty($_POST)) {
+
+    $ArrayValidate = new ArrayValidate();
+
+    $valid = array(
+        "name" => array(
+            "label" => "Nome",
+            "validates" => array(
+                "notnull" => true,
+                "maxlength" => 10,
+                "minlength" => 4
+            )
+        ),
+        "lastname" => array(
+            "label" => "Sobrenome",
+            "validates" => array(
+                "notnull" => true,
+                "maxlength" => 10,
+                "minlength" => 4,
+            )
+        ),
+        "age" => array(
+            "label" => "Idade",
+            "validates" => array(
+                "notnull" => true,
+                "maxlength" => 3,
+                "minlength" => 2,
+                "numeric" => true
+            )
+        ),
+        "convertNumber" => array(
+            "label" => "convertNumber",
+            "validates" => array(
+                "notnull" => true,
+                "maxlength" => 10
+            ),
+            "format" => "convertNumber"
+        ),
+        "convertDate" => array(
+            "label" => "convertDate",
+            "validates" => array(
+                "notnull" => true
+            ),
+            "format" => "date"
+        )
+    );
+    echo '<pre>';
+    var_dump($ArrayValidate->margeValidate($valid, $_POST));
+    echo '</pre>';
+    unset($_POST);
+}
+?>
+
+<html>
+<head></head>
+<body>
+<form method="post" action="">
+    <input type="text" name="name" placeholder="name"/>
+    <input type="text" name="lastname" placeholder="lastname"/>
+    <input type="text" name="age" placeholder="age"/>
+    <input type="text" name="convertNumber" placeholder="convertNumber"/>
+    <input type="text" name="convertDate" placeholder="DD/MM/YYYY"/>
+    <input type="submit">
+</form>
+</body>
+</html>
