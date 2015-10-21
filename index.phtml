@@ -1,8 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(-1);
-
 include 'ArrayValidate.class.php';
 if (!empty($_POST)) {
 
@@ -10,7 +6,7 @@ if (!empty($_POST)) {
 
     $valid = array(
         "name" => array(
-            "label" => "Nome",
+            "label" => "Name",
             "validates" => array(
                 "notnull" => true,
                 "maxlength" => 10,
@@ -18,7 +14,7 @@ if (!empty($_POST)) {
             )
         ),
         "lastname" => array(
-            "label" => "Sobrenome",
+            "label" => "Last Name",
             "validates" => array(
                 "notnull" => true,
                 "maxlength" => 10,
@@ -26,7 +22,7 @@ if (!empty($_POST)) {
             )
         ),
         "age" => array(
-            "label" => "Idade",
+            "label" => "Age",
             "validates" => array(
                 "notnull" => true,
                 "maxlength" => 3,
@@ -35,38 +31,103 @@ if (!empty($_POST)) {
             )
         ),
         "convertNumber" => array(
-            "label" => "convertNumber",
+            "label" => "Convert Number",
             "validates" => array(
-                "notnull" => true,
                 "maxlength" => 10
             ),
             "format" => "convertNumber"
         ),
         "convertDate" => array(
-            "label" => "convertDate",
+            "label" => "Convert Date",
             "validates" => array(
                 "notnull" => true
             ),
             "format" => "date"
         )
     );
-    echo '<pre>';
-    var_dump($ArrayValidate->margeValidate($valid, $_POST));
-    echo '</pre>';
-    unset($_POST);
+
+    $rs = $ArrayValidate->margeValidate($valid, $_POST);
+
 }
 ?>
 
 <html>
-<head></head>
+<head>
+    <title>PHP-Array-Validate</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
 <body>
-<form method="post" action="">
-    <input type="text" name="name" placeholder="name"/>
-    <input type="text" name="lastname" placeholder="lastname"/>
-    <input type="text" name="age" placeholder="age"/>
-    <input type="text" name="convertNumber" placeholder="convertNumber"/>
-    <input type="text" name="convertDate" placeholder="DD/MM/YYYY"/>
-    <input type="submit">
-</form>
+<div class="container">
+    <form method="post" action="" style="margin-top:30px;margin-bottom:30px;">
+        <fieldset>
+            <legend>Validate Form</legend>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Name</label>
+                        <input class="form-control" name="name" placeholder="Name" type="text"
+                               value="<?php echo (isset($_POST['name'])) ? $_POST['name'] : ''; ?>">
+
+                        <p class="help-block">Not null, maxlength 10, minlength 4.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Last Name</label>
+                        <input class="form-control" name="lastname" placeholder="Last Name" type="text"
+                               value="<?php echo (isset($_POST['lastname'])) ? $_POST['lastname'] : ''; ?>">
+
+                        <p class="help-block">Not null, maxlength 10, minlength 4.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Age</label>
+                        <input class="form-control" name="age" placeholder="Age" type="text"
+                               value="<?php echo (isset($_POST['age'])) ? $_POST['age'] : ''; ?>">
+
+                        <p class="help-block">Not null, maxlength 3, minlength 2, type numeric.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Convert Number</label>
+                        <input class="form-control" name="convertNumber" placeholder="Convert Number" type="text"
+                               value="<?php echo (isset($_POST['convertNumber'])) ? $_POST['convertNumber'] : ''; ?>">
+
+                        <p class="help-block">Maxlength 10, format convert number.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Date</label>
+                        <input class="form-control" name="convertDate" placeholder="DD/MM/YYYY" type="text"
+                               value="<?php echo (isset($_POST['convertDate'])) ? $_POST['convertDate'] : ''; ?>">
+
+                        <p class="help-block">Not null, format date.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-primary btn-block" type="submit">Validate</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    <?php if (isset($rs)): ?>
+        <h3>Result</h3>
+        <pre><?php var_dump($rs) ?></pre>
+    <?php endif ?>
+</div>
 </body>
 </html>
