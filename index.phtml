@@ -4,7 +4,51 @@ if (!empty($_POST)) {
 
     $ArrayValidate = new ArrayValidate();
 
-    //Add label error and new validation
+    /**
+     * Add new label, validation or format.
+     * $ArrayValidate->setConfig(
+     *      array(
+     *          ****
+     *      )
+     * );
+     *
+     *
+     * === Index ===
+     *
+     * "lb_erro" => Labels Erro, change the "?" the desired value.
+     * Example:
+     * "lb_erro" => array(
+     *      "maxlength" => "Field ?, can not be greater than ? characters."
+     * )
+     *
+     * "validates" => Validations, Create your own validation.
+     * $valid => value method. eg "notnull" => true, $valid => true;
+     * $valObj => field value;
+     * $key => field index;
+     * $label => field label;
+     * Example:
+     * "validates" => array(
+     *     "maxlength" =>
+     *          'if (strlen($valObj) > intval($valid)) {
+     *          $this->construct_erro("maxlength", array($label,$valid));
+     *      }'
+     * )
+     * $this->construct_erro => call label error "maxlength", send parameters array($label,$valid) to change "?"
+     *
+     *
+     * "format" => Format, format the return value.
+     * $valObj => field value;
+     * $key => field index;
+     * $label => field label;
+     * Example:
+     *
+     * "format" => array(
+     *      "convertNumber" => '$this->construct_rs($key, preg_replace("/\D/", "", $valObj));'
+     * )
+     * $this->construct_rs => construct return result, send parameters key more value.
+     */
+
+    //Example setConfig.
     $ArrayValidate->setConfig(
         array(
             "lb_erro" => array(
@@ -19,6 +63,9 @@ if (!empty($_POST)) {
         )
     );
 
+    /**
+     * Rules
+     */
     $valid = array(
         "name" => array(
             "label" => "Name",

@@ -7,7 +7,7 @@ class ArrayValidate
      */
     private $config = array(
         /**
-         * Labels Erro, change the "?" the desired value.
+         * lb_erro => Labels Erro, change the "?" the desired value.
          */
         "lb_erro" => array(
             "notnull" => "Field ?, can not be null.",
@@ -16,7 +16,7 @@ class ArrayValidate
             "dateValid" => "Field ?, date invalid.",
         ),
         /**
-         * Validations, Create your own validation.
+         * validates => Validations, Create your own validation.
          * $valid => value method. eg "notnull" => true, $valid => true;
          * $valObj => field value;
          * $key => field index;
