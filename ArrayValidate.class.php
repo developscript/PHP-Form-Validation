@@ -5,15 +5,15 @@ class ArrayValidate
     /**
      * @var array
      */
-    public $config = array(
+    private $config = array(
         /**
          * Labels Erro, change the "?" the desired value.
          */
         "lb_erro" => array(
-            "notnull" => "Field ? can not be null.",
-            "maxlength" => "Field ? can not be greater than ? characters.",
-            "minlength" => "Field ? can not be less than ? characters.",
-            "type_integer" => "Field ?, invalid number."
+            "notnull" => "Field ?, can not be null.",
+            "maxlength" => "Field ?, can not be greater than ? characters.",
+            "minlength" => "Field ?, can not be less than ? characters.",
+            "dateValid" => "Field ?, date invalid.",
         ),
         /**
          * Validations, Create your own validation.
@@ -35,9 +35,14 @@ class ArrayValidate
                 'if (strlen($valObj) < intval($valid)) {
                     $this->construct_erro("minlength", array($label,$valid));
                 }',
-            "numeric" =>
-                'if($valid === true && !is_numeric($valObj)){
-                    $this->construct_erro("type_integer", array($label));
+            "dateValid" =>
+                'if($valid === true && count(explode("/", $valObj)) !== 3){
+                    $this->construct_erro("dateValid", array($label));
+                }else if($valid === true && count(explode("/", $valObj)) === 3){
+                    list($m, $d, $y) = explode("/", $valObj);
+                    if(!checkdate($m, $d, $y)){
+                        $this->construct_erro("dateValid", array($label));
+                    }
                 }'
         ),
         /**
@@ -47,14 +52,39 @@ class ArrayValidate
          * $label => field label;
          */
         "format" => array(
-            "date" => 'if(count(explode("/", $valObj)) === 3){ list($d, $m, $y) = explode("/", $valObj); $this->construct_rs($key, $y . "-" . $m . "-" . $d); }',
+            "date" => 'list($m, $d, $y) = explode("/", $valObj); $this->construct_rs($key, $y . "-" . $m . "-" . $d);',
             "convertNumber" => '$this->construct_rs($key, preg_replace("/\D/", "", $valObj));'
         )
     );
+
+    /**
+     * Get Config
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * Set APPEND Config
+     * @param $config
+     */
+    public function setConfig($config, $key = null)
+    {
+        foreach ($config as $k => $v) {
+            if(is_array($v)){
+                $this->setConfig($v, $k);
+            }else if(!empty($key)){
+                $this->config[$key][$k] = $v;
+            }
+        }
+    }
+
     /**
      * @var array
      */
-    public $return = array(
+    private $return = array(
         "data" => array(),
         "erros" => array()
     );
@@ -63,7 +93,7 @@ class ArrayValidate
      * @param $lb_erro
      * @param $data
      */
-    public function construct_erro($lb_erro, $data)
+    private function construct_erro($lb_erro, $data)
     {
         if (array_key_exists($lb_erro, $this->config['lb_erro'])) {
             if (is_array($data)) {
@@ -82,7 +112,7 @@ class ArrayValidate
      * @param $key
      * @param $valObj
      */
-    public function construct_rs($key, $valObj)
+    private function construct_rs($key, $valObj)
     {
         $this->return["data"][$key] = $valObj;
     }
@@ -112,7 +142,7 @@ class ArrayValidate
 
                     eval($this->config['format'][$v['format']]);
 
-                }else{
+                } else {
 
                     $this->construct_rs($key, $object[$key]);
 

@@ -4,6 +4,21 @@ if (!empty($_POST)) {
 
     $ArrayValidate = new ArrayValidate();
 
+    //Add label error and new validation
+    $ArrayValidate->setConfig(
+        array(
+            "lb_erro" => array(
+                "type_integer" => "Field ?, invalid number."
+            ),
+            "validates" => array(
+                "numeric" =>
+                    'if($valid === true && !is_numeric($valObj)){
+                    $this->construct_erro("type_integer", array($label));
+                }'
+            )
+        )
+    );
+
     $valid = array(
         "name" => array(
             "label" => "Name",
@@ -40,7 +55,8 @@ if (!empty($_POST)) {
         "convertDate" => array(
             "label" => "Convert Date",
             "validates" => array(
-                "notnull" => true
+                "notnull" => true,
+                "dateValid" => true
             ),
             "format" => "date"
         )
@@ -107,8 +123,8 @@ if (!empty($_POST)) {
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="control-label">Date</label>
-                        <input class="form-control" name="convertDate" placeholder="DD/MM/YYYY" type="text"
+                        <label class="control-label">Convert Date</label>
+                        <input class="form-control" name="convertDate" placeholder="MM/DD/YYYY" type="text"
                                value="<?php echo (isset($_POST['convertDate'])) ? $_POST['convertDate'] : ''; ?>">
 
                         <p class="help-block">Not null, format date.</p>
