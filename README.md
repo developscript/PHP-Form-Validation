@@ -76,10 +76,10 @@ $ArrayValidate->setConfig(
 ```
 
 ###Function "construct_rs", construct return result.
-$this->construct_rs => construct return result, send parameters key more value.
+$this->construct_rs => construct return "data" result, send parameters key more value.
 
 ###Function "construct_erro", call label error.
-$this->construct_erro => call label error "maxlength", send parameters array($label,$valid) to change "?".
+$this->construct_erro => construct return "erros" label "maxlength", send parameters array($label,$valid) to change "?".
 
 ###Example "setConfig"
 ```php
